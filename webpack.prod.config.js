@@ -36,6 +36,17 @@ const setMPA = () => {
 };
 
 const { entry, HtmlWebpackPlugins } = setMPA();
+const { entry, HtmlWebpackPlugins } = SPA
+	? {
+			entry: './src/index.tsx',
+			HtmlWebpackPlugins: [
+				new HtmlWebpackPlugin({
+					template: `./src/index.html`,
+					filename: `index.html`
+				})
+			]
+		}
+	: setMPA();
 // console.log(entry);
 // console.log(HtmlWebpackPlugins);
 

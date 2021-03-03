@@ -1,13 +1,54 @@
 'use strict';
 
+const glob = require('glob');
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
+const SPA = true;
+const setMPA = () => {
+	const entry = {};
+	const HtmlWebpackPlugins = [];
+
+	const entryFiles = glob.sync(path.join(__dirname, './src/*/index.tsx'));
+
+	Object.keys(entryFiles).map((index) => {
+		const entryFile = entryFiles[index];
+		// get page name
+		const match = entryFile.match(/src\/(.*)\/index\.tsx/);
+		const pageName = match && match[1];
+
+		entry[pageName] = entryFile;
+		HtmlWebpackPlugins.push(
+			new HtmlWebpackPlugin({
+				template: `./src/${pageName}/index.html`,
+				chunks: [ pageName ],
+				filename: `${pageName}.html`
+			})
+		);
+	});
+	return {
+		entry,
+		HtmlWebpackPlugins
+	};
+};
+
+const { entry, HtmlWebpackPlugins } = SPA
+	? {
+			entry: './src/index.tsx',
+			HtmlWebpackPlugins: [
+				new HtmlWebpackPlugin({
+					template: `./src/index.html`,
+					filename: `index.html`
+				})
+			]
+		}
+	: setMPA();
+
 module.exports = {
 	target: 'web',
-	entry: './src/index.tsx',
+	entry: entry,
 	output: {
 		path: path.join(__dirname, 'dist'),
 		filename: '[name].js'
@@ -59,12 +100,10 @@ module.exports = {
 		]
 	},
 	plugins: [
-		new HtmlWebpackPlugin({
-			template: './src/index.html'
-		}),
 		new MiniCssExtractPlugin({
 			filename: '[name].css'
-		})
+		}),
+		...HtmlWebpackPlugins
 		// new webpack.HotModuleReplacementPlugin()
 	],
 	//当使用cdn方式引入外部依赖的时候，可以通过external字段告诉webpack不要去打包在bundle里
@@ -72,15 +111,19 @@ module.exports = {
 	// 	'react': 'React',
 	// 	'react-dom': 'ReactDOM'
 	// }
-	// watch: true,
+	watch: true,
+	devServer: {
+		// contentBase: './dist',
+		// hot: true,
+		// open: true,
+		static: [ path.resolve(__dirname, 'dist') ],
+		open: true,
+		host: 'localhost',
+		port: 4000
+	},
 	watchOptions: {
 		ignored: /node_modules/,
 		aggregateTimeout: 300,
 		poll: 1000
-	},
-	devServer: {
-		contentBase: './dist',
-		hot: true,
-		open: true
 	}
 };
