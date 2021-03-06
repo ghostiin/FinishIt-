@@ -5,6 +5,7 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const WorkboxPlugin = require('workbox-webpack-plugin');
 
 const SPA = true;
 const setMPA = () => {
@@ -61,8 +62,16 @@ module.exports = {
 	module: {
 		rules: [
 			// All files with a '.ts' or '.tsx' extension will be handled by 'awesome-typescript-loader'.
-			{ test: /\.tsx?$/, loader: 'awesome-typescript-loader' },
-
+			{
+				test: /\.tsx?$/,
+				use: [
+					'awesome-typescript-loader',
+					{
+						loader: 'astroturf/loader',
+						options: { extension: '.module.scss' }
+					} //* not good support ts & webpack5
+				]
+			},
 			// All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
 			{ enforce: 'pre', test: /\.js$/, loader: 'source-map-loader' },
 			{
@@ -78,6 +87,7 @@ module.exports = {
 					{
 						loader: 'css-loader',
 						options: {
+							modules: true,
 							importLoaders: 1
 						}
 					},
@@ -103,6 +113,10 @@ module.exports = {
 		new MiniCssExtractPlugin({
 			filename: '[name].css'
 		}),
+		// new WorkboxPlugin.GenerateSW({
+		// 	clientsClaim: true,
+		// 	skipWaiting: true
+		// }),
 		...HtmlWebpackPlugins
 		// new webpack.HotModuleReplacementPlugin()
 	],

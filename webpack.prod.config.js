@@ -7,7 +7,9 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const WorkboxPlugin = require('workbox-webpack-plugin');
 
+const SPA = true;
 const setMPA = () => {
 	const entry = {};
 	const HtmlWebpackPlugins = [];
@@ -35,7 +37,7 @@ const setMPA = () => {
 	};
 };
 
-const { entry, HtmlWebpackPlugins } = setMPA();
+// const { entry, HtmlWebpackPlugins } = setMPA();
 const { entry, HtmlWebpackPlugins } = SPA
 	? {
 			entry: './src/index.tsx',
@@ -65,7 +67,16 @@ module.exports = {
 	module: {
 		rules: [
 			// All files with a '.ts' or '.tsx' extension will be handled by 'awesome-typescript-loader'.
-			{ test: /\.tsx?$/, loader: 'awesome-typescript-loader' },
+			{
+				test: /\.tsx?$/,
+				use: [
+					'awesome-typescript-loader',
+					{
+						loader: 'astroturf/loader',
+						options: { extension: '.module.scss' }
+					}
+				]
+			},
 
 			// All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
 			{ enforce: 'pre', test: /\.js$/, loader: 'source-map-loader' },
@@ -82,6 +93,7 @@ module.exports = {
 					{
 						loader: 'css-loader',
 						options: {
+							modules: true,
 							importLoaders: 1
 						}
 					},
@@ -113,6 +125,10 @@ module.exports = {
 		// }),
 		new MiniCssExtractPlugin({
 			filename: '[name]_[contenthash:8].css'
+		}),
+		new WorkboxPlugin.GenerateSW({
+			clientsClaim: true,
+			skipWaiting: true
 		}),
 		...HtmlWebpackPlugins
 	],

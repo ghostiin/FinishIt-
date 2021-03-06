@@ -1,0 +1,12 @@
+.btn {
+	color: #0279fa;
+	font-weight: bold;
+	display: inline-flex;
+
+	//TODO 重置btn不同状态下样式
+	&:hover {
+		cursor: pointer;
+	}
+
+	//TODO 不同btn的样式 ghost| primary
+}

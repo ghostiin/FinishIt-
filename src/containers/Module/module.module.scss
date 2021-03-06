@@ -1,0 +1,12 @@
+.module {
+	width: 100%;
+	//TODO mobile css兼容性是否能通过插件自动编译解决？
+	// display: flex;
+	// justify-content: space-between;
+	// flex-wrap: wrap;
+
+	display: grid;
+	grid-gap: 16px;
+	grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+	margin: 10px 0;
+}

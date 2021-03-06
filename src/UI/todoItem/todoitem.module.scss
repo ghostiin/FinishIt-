@@ -1,0 +1,49 @@
+.todoitem {
+	width: 100%;
+	padding: 4px;
+
+	& > span {
+		display: inline-block;
+		vertical-align: middle;
+		color: #3b3b3b;
+		font-size: 18px;
+	}
+
+	& > input[type=radio] {
+		display: none;
+	}
+
+	& > label {
+		display: inline-block;
+		width: 26px;
+		height: 26px;
+		border-radius: 50%;
+		border: 1px solid #bdbdc5;
+		position: relative;
+		cursor: pointer;
+		vertical-align: middle;
+		margin-right: 10px;
+	}
+
+	//选中radio时样式
+	input[type=radio]:checked + label {
+		border-color: rgb(253, 122, 0);
+		&::before {
+			content: " ";
+			display: inline-block;
+			width: 20px;
+			height: 20px;
+			background-color: rgb(253, 122, 0);
+			border-radius: 50%;
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+		}
+	}
+
+	input[type=radio]:checked ~ span {
+		color: #bdbdc5;
+		text-decoration: line-through;
+	}
+}

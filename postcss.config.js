@@ -1,6 +1,8 @@
 module.exports = {
 	plugins: [
 		require('autoprefixer'),
+		require('postcss-preset-env')(/* pluginOptions */),
+		require('postcss-nested'),
 		require('postcss-px-to-viewport')({
 			unitToConvert: 'px',
 			viewportWidth: 375,
@@ -14,6 +16,7 @@ module.exports = {
 			replace: true,
 			landscape: false,
 			exclude: [ /node_modules/ ]
-		})
+		}),
+		require('postcss-normalize')(),
 	]
 };
