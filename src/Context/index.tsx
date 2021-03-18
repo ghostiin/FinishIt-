@@ -24,6 +24,7 @@ const initialTodos = JSON.parse(localStorage.getItem('todos'))
 		scheduleTime: null
 	}
 	];
+
 export const TodosContext = React.createContext({} as IContextProps);
 
 export const ADD_TODO = 'add_todo';

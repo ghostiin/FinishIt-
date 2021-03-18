@@ -52,6 +52,10 @@ const Home: React.FunctionComponent<homeProps> = props => {
     }, [])
 
     useEffect(() => {
+        window.localStorage.setItem('todos', JSON.stringify(todos))
+    }, [todos.length, todos])
+
+    useEffect(() => {
         if (newTodo.name && !isAdding) {
             addTodo({ ...newTodo, createTime: dayjs().format(), flag: false, scheduleTime: '' });
             setNewTodo({ name: '', id: dayjs().unix(), completed: false })
