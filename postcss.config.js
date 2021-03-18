@@ -10,13 +10,13 @@ module.exports = {
 			propList: [ '*' ],
 			viewportUnit: 'vw',
 			fontViewportUnit: 'vw',
-			selectorBlackList: [ 'novw-wrap' ],
+			selectorBlackList: [ '.ignore-', '.pc' ],
 			minPixelValue: 1,
 			mediaQuery: false,
 			replace: true,
 			landscape: false,
 			exclude: [ /node_modules/ ]
 		}),
-		require('postcss-normalize')(),
+		require('postcss-normalize')()
 	]
 };

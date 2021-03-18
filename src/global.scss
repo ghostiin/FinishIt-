@@ -8,3 +8,7 @@ body {
 	font-size: 16px;
 	margin: 0 16px;
 }
+
+:global(.pc) {
+	font-size: 16px;
+}

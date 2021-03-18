@@ -133,7 +133,7 @@ module.exports = {
 		static: [ path.resolve(__dirname, 'dist') ],
 		open: true,
 		host: 'localhost',
-		port: 4000
+		port: 4001
 	},
 	watchOptions: {
 		ignored: /node_modules/,

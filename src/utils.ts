@@ -14,3 +14,6 @@ export  const omit = (obj:any, uselessKeys:any) =>
 uselessKeys.reduce((acc:any, key:any) => {
   return {...acc, [key]: undefined}
 }, obj)
+
+
+// 判断设备来源

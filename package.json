@@ -15,6 +15,7 @@
     "@babel/core": "^7.12.16",
     "@babel/preset-env": "^7.12.16",
     "@babel/preset-react": "^7.12.13",
+    "@types/react-router-dom": "^5.1.7",
     "@types/webpack-env": "^1.16.0",
     "autoprefixer": "^10.2.4",
     "awesome-typescript-loader": "^5.2.1",
@@ -42,11 +43,17 @@
     "@types/react": "^17.0.2",
     "@types/react-dom": "^17.0.1",
     "astroturf": "^1.0.0-beta.17",
+    "axios": "^0.21.1",
+    "current-device": "^0.10.2",
+    "dayjs": "^1.10.4",
     "glob": "^7.1.6",
     "node-sass": "^5.0.0",
     "postcss-nested": "^5.0.5",
     "postcss-preset-env": "^6.7.0",
     "react": "^17.0.1",
-    "react-dom": "^17.0.1"
+    "react-dom": "^17.0.1",
+    "react-router-dom": "^5.2.0",
+    "rxjs": "^6.6.6",
+    "url-search-params-polyfill": "^8.1.0"
   }
 }
