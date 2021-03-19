@@ -11,9 +11,13 @@ const Module = () => {
                 All
             </div>
         </Card>
-        <Card>card2</Card>
-        <Card>card3</Card>
-        <Card>card4</Card>
+        <Card><div onClick={ () => history.push('/?filter=scheduled') }>
+            Scheduled
+            </div></Card>
+        <Card><div onClick={ () => history.push('/?filter=flag') }>
+            Flag
+            </div></Card>
+        <Card>Review</Card>
     </div>
 }
 

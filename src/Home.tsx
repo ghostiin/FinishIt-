@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import dayjs from 'dayjs';
 import { useLocation } from 'react-router-dom';
 import { filterTypes, FILTER_TYPE } from './constants';
-import { TodosContext, ADD_TODO } from './Context';
+import { TodosContext, ADD_TODO, DELETE_TODO } from './Context';
 import device from 'current-device';
 import List from './containers/List';
 import Module from './containers/Module';
@@ -33,6 +33,14 @@ const Home: React.FunctionComponent<homeProps> = props => {
             case filterTypes.all:
                 return todos;
             //TODO 添加其他filter
+            case filterTypes.flag:
+                return todos.filter((t: todoType) => {
+                    return !t.completed && !dayjs().isBefore(t.createTime, 'date')
+                });
+            case filterTypes.scheduled:
+                return todos.filter((t: todoType) => {
+                    return !t.completed && !dayjs().isAfter(t.createTime, 'date')
+                });
             default:
                 //返回today's todo
                 return todos.filter((t: todoType) => {
@@ -43,6 +51,8 @@ const Home: React.FunctionComponent<homeProps> = props => {
     const addTodo = (todo: any) => {
         dispatch({ type: ADD_TODO, payload: todo })
     }
+
+
     useEffect(() => {
         const fn = () => {
             setIsAdding(false);
@@ -64,11 +74,12 @@ const Home: React.FunctionComponent<homeProps> = props => {
 
     const Mobile = (
         <>
-            <Nav isFiltered={ !!IS_FILTERED } />
+            <Search isFiltered={ IS_FILTERED } />
+
             {
                 !IS_FILTERED &&
                 (<>
-                    <Search />
+
                     <Module />
                 </>)
             }
@@ -79,7 +90,8 @@ const Home: React.FunctionComponent<homeProps> = props => {
                     todo={ newTodo }
                     setTodo={ (modifyContent: any) => {
                         setNewTodo({ ...newTodo, ...modifyContent })
-                    } } />
+                    } }
+                />
             }
             <Footer addNewOne={ () => { setIsAdding(true) } } />
         </>

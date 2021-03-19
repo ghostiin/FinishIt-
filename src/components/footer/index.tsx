@@ -10,11 +10,12 @@ export type footerProps = {
 const Footer: React.FC<footerProps> = (props) => {
     return (
         <div className={ styles.footer }>
-            <Button>回顾</Button>
+
             <Button onClick={ (e) => {
                 e.nativeEvent.stopImmediatePropagation();
                 props.addNewOne();
             } }>添加TODO</Button>
+            {/* <Button>回顾</Button> */ }
         </div>
     )
 }

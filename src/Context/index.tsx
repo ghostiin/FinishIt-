@@ -28,7 +28,7 @@ const initialTodos = JSON.parse(localStorage.getItem('todos'))
 export const TodosContext = React.createContext({} as IContextProps);
 
 export const ADD_TODO = 'add_todo';
-export const REMOVE_TODO = 'remove_todo';
+export const DELETE_TODO = 'delete_todo';
 export const TOGGLE_TODO = 'toggle_todo';
 export const MODIFY_TODO = 'modify_todo';
 
@@ -38,7 +38,6 @@ export const UNDO_TODO = 'undo_todo';
 const todosReducer = (state: Array<any>, action: { type: string, payload: any }) => {
 	switch (action.type) {
 		case ADD_TODO:
-			console.log('adding', action.payload)
 			return [...state, action.payload];
 		case TOGGLE_TODO:
 			return state.map(t => {
@@ -54,6 +53,9 @@ const todosReducer = (state: Array<any>, action: { type: string, payload: any })
 				}
 				return t;
 			})
+		case DELETE_TODO:
+			console.log(action.payload)
+			return state.filter(t => t.id !== action.payload)
 		default:
 			return state;
 	}

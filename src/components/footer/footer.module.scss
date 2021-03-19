@@ -5,5 +5,7 @@
 	right: 16px;
 	align-items: center;
 	display: flex;
+	align-items: flex-end;
+	flex-direction: row-reverse;
 	justify-content: space-between;
 }

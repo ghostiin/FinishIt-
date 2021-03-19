@@ -1,18 +1,31 @@
 .search-bar {
-	color: red;
 	width: 100%;
-	display: grid;
-	place-items: center;
+	display: flex;
+	justify-content: space-between;
+	vertical-align: middle;
+	align-items: center;
+	margin-top: 16px;
 
 	& > input {
-		width: 100%;
+		// width: 100%;
+		flex: 1;
 		outline: none;
 		border: none;
 		padding: 8px;
 		border-radius: 8px;
 		background-color: #e3e3eb;
 		font-size: 16px;
+		display: inline-block;
+		vertical-align: middle;
+		font-size: 16px;
 	}
 
+	& > span {
+		display: inline-block;
+		vertical-align: middle;
+		margin-left: 5px;
+		color: #0279fa;
+		font-weight: bold;
+	}
 	margin-bottom: 25px;
 }
