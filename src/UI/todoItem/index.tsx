@@ -17,6 +17,7 @@ const TodoItem: React.FC<TodoItemProps> = (props) => {
     const { readonly = false } = props;
     const { todos, dispatch } = useContext(TodosContext);
     const [showDelete, setShowDelete] = useState(false);
+    const [canEdit, setCanEdit] = useState(false);
     const inputRef = useRef<HTMLInputElement>();
 
     const bind = useDrag(({ down, movement: [mx, my] }) => {
@@ -45,7 +46,7 @@ const TodoItem: React.FC<TodoItemProps> = (props) => {
     }
 
     return <div className={ styles.todoitem } onClick={ (e) => {
-        if (newOne) {
+        if (newOne || canEdit) {
             e.nativeEvent.stopImmediatePropagation()
         }
     } }
@@ -57,16 +58,27 @@ const TodoItem: React.FC<TodoItemProps> = (props) => {
             ></input>
             <label htmlFor='radioId' onClick={ () => toggleTodo(todo.id) }></label>
             <span >
-                <input type="text" value={ todo.name }
-                    readOnly={ readonly }
-                    onChange={ (e) => {
-                        if (newOne) {
-                            props.setTodo({ name: e.target.value })
-                        } else {
-                            modifyTodo(todo.id, { name: e.target.value })
-                        }
-                    } } ref={ inputRef } autoFocus={ newOne }>
-                </input>
+
+                {
+                    canEdit || newOne ? (
+                        <input type="text" value={ todo.name }
+                            readOnly={ readonly }
+                            onChange={ (e) => {
+                                if (newOne) {
+                                    props.setTodo({ name: e.target.value })
+                                } else {
+                                    modifyTodo(todo.id, { name: e.target.value })
+                                }
+                            } } ref={ inputRef } autoFocus={ newOne || canEdit }
+                            onBlur={ () => { setCanEdit(false) } }
+                        >
+                        </input>
+                    ) : (
+                        <div onClick={ () => { setCanEdit(true) } }>{ todo.name }</div>
+                    )
+                }
+
+
             </span>
         </div>
 
@@ -78,7 +90,7 @@ const TodoItem: React.FC<TodoItemProps> = (props) => {
         {/* <span>
             { todo.name }
         </span> */}
-    </div>
+    </div >
 }
 
 export default TodoItem;

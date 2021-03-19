@@ -18,7 +18,11 @@ const List: React.FunctionComponent<listProps> = (props) => {
                 <div>
                     {
                         todos.map(todo => {
-                            return <TodoItem todo={ todo } key={ todo.id } />
+                            return <TodoItem
+                                todo={ todo }
+                                key={ todo.id }
+
+                            />
                         })
                     }
                 </div>

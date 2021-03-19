@@ -21,9 +21,10 @@ const Search: React.FC<SearchProps> = (props) => {
             setSearchResults([])
         }
     }
+
     return <div className={ styles.search }>
         { !showCancel && <Nav isFiltered={ isFiltered } /> }
-        <SearchBar
+        { !isFiltered && <SearchBar
             placeholder={ '搜索' }
             type={ 'search' }
             showCancel={ showCancel }
@@ -31,7 +32,7 @@ const Search: React.FC<SearchProps> = (props) => {
             clickCancel={ () => { setShowCancel(false) } }
             searchQuery={ searchQuery }
             hasResults={ !!searchResults.length }
-        />
+        /> }
         {
             !!searchResults.length && <div className={ styles.results }>{
                 searchResults.map(st => {

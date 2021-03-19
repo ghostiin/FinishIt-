@@ -26,6 +26,7 @@ const Home: React.FunctionComponent<homeProps> = props => {
     const IS_FILTERED = !!(filter && FILTER_TYPE[filter])
     const { todos, dispatch } = useContext(TodosContext);
     const [isAdding, setIsAdding] = useState(false);
+
     const [newTodo, setNewTodo] = useState<any>({ name: '', id: dayjs().unix(), completed: false })
 
     const filterTodos = () => {
@@ -83,10 +84,12 @@ const Home: React.FunctionComponent<homeProps> = props => {
                     <Module />
                 </>)
             }
-            <List todos={ filterTodos() } filterType={ filter } />
+            <List todos={ filterTodos() } filterType={ filter }
+            />
             {
                 isAdding && <TodoItem
                     newOne={ isAdding }
+
                     todo={ newTodo }
                     setTodo={ (modifyContent: any) => {
                         setNewTodo({ ...newTodo, ...modifyContent })
