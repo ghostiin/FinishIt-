@@ -1,8 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
 import dayjs from 'dayjs';
+import { v4 as uuidv4 } from 'uuid';
 import { useLocation } from 'react-router-dom';
 import { filterTypes, FILTER_TYPE } from './constants';
-import { TodosContext, ADD_TODO, DELETE_TODO } from './Context';
+import { TodosContext, ADD_TODO } from './Context';
 import device from 'current-device';
 import List from './containers/List';
 import Module from './containers/Module';
@@ -17,6 +18,7 @@ type todoType = {
     name: string,
     completed: boolean,
     createTime: string,
+    scheduleTime: string
 }
 
 const Home: React.FunctionComponent<homeProps> = props => {
@@ -25,8 +27,17 @@ const Home: React.FunctionComponent<homeProps> = props => {
     const IS_FILTERED = !!(filter && FILTER_TYPE[filter])
     const { todos, dispatch } = useContext(TodosContext);
     const [isAdding, setIsAdding] = useState(false);
+    const [data, setData] = useState({
+        [filterTypes.all]: todos.length,
+        [filterTypes.flag]: todos.filter((t: todoType) => {
+            return !t.completed && dayjs().isAfter(t.createTime, 'date')
+        }).length,
+        [filterTypes.scheduled]: todos.filter((t: todoType) => {
+            return t.scheduleTime && dayjs().isBefore(t.scheduleTime, 'date')
+        }).length,
+    })
 
-    const [newTodo, setNewTodo] = useState<any>({ name: '', id: dayjs().unix(), completed: false })
+    const [newTodo, setNewTodo] = useState<any>({ name: '', id: uuidv4(), completed: false })
 
     const filterTodos = () => {
         switch (filter) {
@@ -39,7 +50,7 @@ const Home: React.FunctionComponent<homeProps> = props => {
                 });
             case filterTypes.scheduled:
                 return todos.filter((t: todoType) => {
-                    return !t.completed && dayjs().isBefore(t.createTime, 'date')
+                    return t.scheduleTime && dayjs().isBefore(t.scheduleTime, 'date')
                 });
             default:
                 //返回today's todo
@@ -64,28 +75,31 @@ const Home: React.FunctionComponent<homeProps> = props => {
     useEffect(() => {
         console.log('setitem'); //TODO
         window.localStorage.setItem('todos', JSON.stringify(todos))
+        setData({
+            [filterTypes.all]: todos.length,
+            [filterTypes.flag]: todos.filter((t: todoType) => {
+                return !t.completed && dayjs().isAfter(t.createTime, 'date')
+            }).length,
+            [filterTypes.scheduled]: todos.filter((t: todoType) => {
+                return t.scheduleTime && !t.completed && dayjs().isBefore(t.scheduleTime, 'date')
+            }).length,
+        })
     }, [todos.length, todos])
 
     useEffect(() => {
         if (newTodo.name && !isAdding) {
             addTodo({ ...newTodo, createTime: dayjs().format(), flag: false, scheduleTime: '' });
-            setNewTodo({ name: '', id: dayjs().unix(), completed: false })
+            setNewTodo({ name: '', id: uuidv4(), completed: false })
         }
     }, [isAdding])
 
     const Mobile = (
         <>
             <Search isFiltered={ IS_FILTERED } />
-
             {
-                !IS_FILTERED &&
-                (<>
-
-                    <Module />
-                </>)
+                !IS_FILTERED && <Module data={ data } />
             }
-            <List todos={ filterTodos() } filterType={ filter }
-            />
+            <List todos={ filterTodos() } filterType={ filter } />
             {
                 isAdding && <TodoItem
                     newOne={ isAdding }

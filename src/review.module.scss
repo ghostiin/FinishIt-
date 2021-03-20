@@ -1,0 +1,35 @@
+.review {
+	margin: 0 16px;
+
+	.sum {
+		margin-top: 20px;
+		color: #696969;
+		font-size: 24px;
+
+		& > span {
+			color: #fd7a00;
+			font-weight: bold;
+			font-size: 30px;
+			padding: 0 5px;
+		}
+	}
+
+	.rate {
+		margin: 10px 0;
+		text-align: center;
+		background-color: #e3e3eb;
+		border-radius: 4px;
+		padding: 2px;
+		color: #69696d;
+		& > span {
+			color: #0279fa;
+			padding: 0 5px;
+		}
+	}
+	.subTitle {
+		color: #696969;
+		font-size: 24px;
+
+		margin: 16px 0;
+	}
+}

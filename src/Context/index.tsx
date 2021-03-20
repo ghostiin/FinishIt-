@@ -1,4 +1,6 @@
+import dayjs from 'dayjs';
 import React, { useReducer } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 
 interface IContextProps {
 	todos: any;
@@ -6,24 +8,35 @@ interface IContextProps {
 	dispatch: any;
 }
 
-const initialTodos = JSON.parse(localStorage.getItem('todos'))
-	|| [{
-		name: '样例todo1',
-		id: 1,
-		completed: false,
-		createTime: '2021-03-18T21:06:13+08:00',
-		flag: false,
-		scheduleTime: null
-	},
-	{
-		name: 'past todo2',
-		id: 2,
-		completed: false,
-		createTime: '2021-02-18T21:06:13+08:00',
-		flag: false,
-		scheduleTime: null
+
+const genMockTodos = () => {
+	const m = [14, 15, 16, 17, 18, 19, 20];
+	const mocks: { name: string; id: string; scheduleTime: dayjs.Dayjs; completed: boolean; flag: boolean; createTime: string; }[] = [];
+	function g() {
+		m.forEach((d) => {
+			const id = uuidv4();
+			const m = {
+				name: `${d}-${id}`,
+				id: id,
+				scheduleTime: Math.random() > 0.75 ? dayjs().add(Math.floor(Math.random() * (7 + 1)), 'day') : null,
+				completed: Math.random() > 0.5 ? true : false,
+				flag: false,
+				createTime: `2021-03-${d}T21:06:13+08:00`,
+			}
+			mocks.push(m);
+		})
 	}
-	];
+
+	for (let i = 0; i < 4; i++) {
+		g();
+	}
+	console.log(mocks);
+	return mocks;
+
+}
+
+const initialTodos = JSON.parse(localStorage.getItem('todos'));
+// const initialTodos = genMockTodos();
 
 export const TodosContext = React.createContext({} as IContextProps);
 

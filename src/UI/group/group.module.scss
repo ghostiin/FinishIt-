@@ -1,0 +1,16 @@
+.group {
+	.title {
+		display: flex;
+		justify-content: space-between;
+		width: 100%;
+		background-color: #fff;
+		border-radius: 12px;
+		color: #696969;
+
+		& > div {
+			padding: 16px;
+		}
+	}
+
+	margin-bottom: 16px;
+}

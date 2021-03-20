@@ -91,7 +91,7 @@ const TodoItem: React.FC<TodoItemProps> = (props) => {
         <span className={ `${styles.menu} ${showDelete && styles['menu-in']}` }
             onClick={ () => { deleteTodo(todo.id); setShowDelete(false) } }
         >
-            删除
+            ❌
         </span>
         {/* <span>
             { todo.name }

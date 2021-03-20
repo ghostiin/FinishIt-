@@ -6,6 +6,7 @@ import {
 } from 'react-router-dom';
 import './global.scss';
 import Home from './Home';
+import Review from './Review';
 
 export default () => {
 
@@ -13,7 +14,10 @@ export default () => {
         <>
             <Router>
                 <TodosProvider>
-                    <Route exact path='/' component={ Home } />
+                    <Switch>
+                        <Route exact path='/' component={ Home } />
+                        <Route exact path='/review' component={ Review } />
+                    </Switch>
                 </TodosProvider>
             </Router>
         </>

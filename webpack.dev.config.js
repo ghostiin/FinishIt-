@@ -132,7 +132,7 @@ module.exports = {
 		// open: true,
 		static: [ path.resolve(__dirname, 'dist') ],
 		open: true,
-		host: '172.20.10.4',
+		host: 'localhost',
 		port: 4001
 	},
 	watchOptions: {

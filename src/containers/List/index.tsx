@@ -6,7 +6,7 @@ import styles from './todolist.module.scss';
 
 type listProps = {
     todos: Array<any>,
-    filterType: string,
+    filterType?: string,
 }
 
 const List: React.FunctionComponent<listProps> = (props) => {
@@ -21,7 +21,6 @@ const List: React.FunctionComponent<listProps> = (props) => {
                             return <TodoItem
                                 todo={ todo }
                                 key={ todo.id }
-
                             />
                         })
                     }
