@@ -8,12 +8,13 @@ export type TodoItemProps = {
     todo: { name: string, id: number, completed: boolean, scheduleTime: string, createTime: string }
     setTodo?: any;
     newOne?: boolean;
+    setAdding?: () => void;
     readonly?: boolean;
 }
 
 
 const TodoItem: React.FC<TodoItemProps> = (props) => {
-    const { newOne = false, todo = { name: '', id: dayjs().unix(), completed: false, createTime: dayjs().format(), flag: false, scheduleTime: '' } } = props;
+    const { newOne = false, setAdding, todo = { name: '', id: dayjs().unix(), completed: false, createTime: dayjs().format(), flag: false, scheduleTime: '' } } = props;
     const { readonly = false } = props;
     const { todos, dispatch } = useContext(TodosContext);
     const [showDelete, setShowDelete] = useState(false);
@@ -70,7 +71,12 @@ const TodoItem: React.FC<TodoItemProps> = (props) => {
                                     modifyTodo(todo.id, { name: e.target.value })
                                 }
                             } } ref={ inputRef } autoFocus={ newOne || canEdit }
-                            onBlur={ () => { setCanEdit(false) } }
+                            onBlur={ () => {
+                                setCanEdit(false);
+                                if (newOne) {
+                                    setAdding();
+                                }
+                            } }
                         >
                         </input>
                     ) : (

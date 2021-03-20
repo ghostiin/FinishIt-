@@ -7,7 +7,6 @@ import device from 'current-device';
 import List from './containers/List';
 import Module from './containers/Module';
 import Search from './containers/Search';
-import Nav from './components/Nav';
 import Footer from './components/footer';
 import TodoItem from './UI/todoItem';
 
@@ -36,11 +35,11 @@ const Home: React.FunctionComponent<homeProps> = props => {
             //TODO 添加其他filter
             case filterTypes.flag:
                 return todos.filter((t: todoType) => {
-                    return !t.completed && !dayjs().isBefore(t.createTime, 'date')
+                    return !t.completed && dayjs().isAfter(t.createTime, 'date')
                 });
             case filterTypes.scheduled:
                 return todos.filter((t: todoType) => {
-                    return !t.completed && !dayjs().isAfter(t.createTime, 'date')
+                    return !t.completed && dayjs().isBefore(t.createTime, 'date')
                 });
             default:
                 //返回today's todo
@@ -63,6 +62,7 @@ const Home: React.FunctionComponent<homeProps> = props => {
     }, [])
 
     useEffect(() => {
+        console.log('setitem'); //TODO
         window.localStorage.setItem('todos', JSON.stringify(todos))
     }, [todos.length, todos])
 
@@ -89,11 +89,11 @@ const Home: React.FunctionComponent<homeProps> = props => {
             {
                 isAdding && <TodoItem
                     newOne={ isAdding }
-
                     todo={ newTodo }
                     setTodo={ (modifyContent: any) => {
                         setNewTodo({ ...newTodo, ...modifyContent })
                     } }
+                    setAdding={ () => { setIsAdding(false) } }
                 />
             }
             <Footer addNewOne={ () => { setIsAdding(true) } } />

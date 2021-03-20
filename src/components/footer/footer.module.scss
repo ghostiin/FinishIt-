@@ -1,11 +1,26 @@
 .footer {
+	&::before {
+		content: '';
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		background-color: rgba(239, 241, 245, 0.1);
+		width: 100vw;
+		height: 40px;
+		filter: blur(5px);
+		backdrop-filter: blur(5px);
+		z-index: -1;
+	}
 	position: fixed;
-	bottom: 10px;
-	left: 16px;
-	right: 16px;
+	bottom: 0;
+	left: 0;
+	right: 0;
 	align-items: center;
 	display: flex;
 	align-items: flex-end;
 	flex-direction: row-reverse;
 	justify-content: space-between;
+	padding: 10px 16px;
+	border-top: 1px solid #fefeff;
 }

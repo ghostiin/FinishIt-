@@ -10,7 +10,6 @@ export type footerProps = {
 const Footer: React.FC<footerProps> = (props) => {
     return (
         <div className={ styles.footer }>
-
             <Button onClick={ (e) => {
                 e.nativeEvent.stopImmediatePropagation();
                 props.addNewOne();

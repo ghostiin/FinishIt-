@@ -1,14 +1,20 @@
 @import-normalize;
 
+html {
+	margin: 0;
+	overflow-x: hidden;
+}
 body {
 	background-color: #f1f2f6;
 	color: #000;
 	font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", STHeiti, "Microsoft Yahei", Tahoma,
 		Simsun, sans-serif;
 	font-size: 16px;
-	// margin: 0 16px;
+	overflow: hidden;
+	margin: 0;
+	overflow-y: auto;
 }
 
-:global(.pc) {
-	font-size: 16px;
+:global(#root) {
+	margin-bottom: 40px;
 }
