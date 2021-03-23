@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useDrag } from 'react-use-gesture';
-import { DELETE_TODO, MODIFY_TODO, TodosContext, TOGGLE_TODO } from '../../Context';
+import { DELETE_TODO, MODIFY_TODO, TodosContext, TOGGLE_TODO } from '../../Context/todos';
 import Modal from '../modal';
 import styles from './todoitem.module.scss';
 import DayPickerInput from 'react-day-picker/DayPickerInput';

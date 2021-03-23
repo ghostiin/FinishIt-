@@ -1,0 +1,27 @@
+.container {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	z-index: 100;
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+
+	&,
+	.message {
+		pointer-events: none;
+	}
+
+	.message {
+		text-align: center;
+		margin: 10px auto;
+		display: inline-flex;
+		background: #fff;
+		border-radius: 10px;
+		padding: 10px 20px;
+		& > span {
+			margin-left: 10px;
+		}
+	}
+}

@@ -1,3 +1,4 @@
+import { message } from './../UI/message';
 import axios from 'axios';
 
 //TODO 暂时使用NEI在线mock地址
@@ -9,11 +10,30 @@ const client =axios.create({
     baseURL: BASE_URL
 })
 
+client.interceptors.request.use(
+    config=>{
+        if (localStorage.getItem('token')) { //统一带token请求
+            config.headers.Authorization = localStorage.getItem('token');  
+          }
+        return config
+    },
+    err=>{
+        console.log(err)
+
+    }
+)
+
 //TODO 封装axios，同一错误处理
 client.interceptors.response.use(
-    res=>res.data,
+    res=>{
+        return res.data;
+    },
     err=>{
-        console.log(err,'network err')
+        if(!err) {
+            Promise.reject(err)
+        }
+        const {response } =err;
+        message.error(response.data.message);
     }
 )
 

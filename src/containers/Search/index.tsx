@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import Nav from '../../components/Nav';
 import { ITodo } from '../../constants';
-import { TodosContext } from '../../Context';
+import { TodosContext } from '../../Context/todos';
 import SearchBar from '../../UI/search-bar';
 import TodoItem from '../../UI/todoItem';
 import styles from './search.modules.scss';

@@ -39,16 +39,13 @@ export interface ITodo {
     readonly createdAt?: string;
     readonly updatedAt?: string;
     scheduleTime?: string;
-    readonly __v?: number;
 }
 
 export interface IUser {
-    name: string;
-    _id: string;
-    email: string;
-    createdAt: string;
-    updatedAt: string;
-    __v?: number
+    _id?: string;
+    name?: string;
+    email?: string;
+    password?:string;
 }
 
 
@@ -56,4 +53,20 @@ export interface IData {
     [filterTypes.all]: number;
     [filterTypes.flag]: number;
     [filterTypes.scheduled]: number;
+}
+
+export enum MessageType {
+    warn,
+    success
+}
+export interface IMessage {
+    message: any;
+    key: string;
+    type: MessageType;
+}
+
+// message api
+export interface MessageApi {
+    error: (error: string) => void;
+    //TODO 其他类型message
 }

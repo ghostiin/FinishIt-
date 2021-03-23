@@ -27,6 +27,7 @@
 			margin-bottom: 20px;
 		}
 	}
+
 	:global(.loginPopUp) {
 		background-color: #fff;
 		z-index: 10;
@@ -40,8 +41,31 @@
 		align-items: center;
 		flex-direction: column;
 
-		& > div {
-			margin-bottom: 20px;
+		:global(.form) {
+			display: flex;
+			flex-direction: column;
+			& > input,
+			& > div {
+				appearance: none;
+				padding: .5em 1em;
+				border: 1px solid #ddd;
+				font-size: 1em;
+				text-align: center;
+				font-weight: 400;
+				margin: 10px;
+			}
+		}
+
+		:global(.form-title) {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			& > span {
+				margin-top: 4px;
+				color: #ddd;
+				font-size: 14px;
+			}
 		}
 	}
 }

@@ -1,7 +1,9 @@
 import dayjs from 'dayjs';
-import React, { useReducer } from 'react';
+import React, { useContext, useEffect, useReducer } from 'react';
 import { v4 as uuidv4 } from 'uuid';
+import { getTodos } from '../apis/request';
 import { ITodo } from '../constants';
+import { UserContext } from './user';
 
 interface IContextProps {
 	todos: ITodo[];
@@ -41,6 +43,7 @@ const initialTodos = JSON.parse(localStorage.getItem('todos'));
 
 export const TodosContext = React.createContext({} as IContextProps);
 
+export const SET_TODOS = 'set_todos';
 export const ADD_TODO = 'add_todo';
 export const DELETE_TODO = 'delete_todo';
 export const TOGGLE_TODO = 'toggle_todo';
@@ -51,6 +54,8 @@ export const UNDO_TODO = 'undo_todo';
 
 const todosReducer = (state: Array<ITodo>, action: { type: string, payload: any }) => {
 	switch (action.type) {
+		case SET_TODOS:
+			return [...action.payload];
 		case ADD_TODO:
 			return [...state, action.payload];
 		case TOGGLE_TODO:
@@ -77,6 +82,17 @@ const todosReducer = (state: Array<ITodo>, action: { type: string, payload: any 
 
 export const TodosProvider = (props: { children: React.ReactNode }) => {
 	const [todos, dispatch] = useReducer(todosReducer, initialTodos);
+	const { user } = useContext(UserContext);
+	const fetchOriginalTodos = async () => {
+		if (user) {
+			const resp: any = await getTodos();
+			dispatch({ type: SET_TODOS, payload: resp })
+		}
+	}
+
+	useEffect(() => {
+		fetchOriginalTodos()
+	}, [user])
 
 	return <TodosContext.Provider value={ { todos, dispatch } }>{ props.children }</TodosContext.Provider>;
 };

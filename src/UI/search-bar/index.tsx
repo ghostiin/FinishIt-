@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import debounce from 'lodash/debounce';
 import styles from './search-bar.module.scss'
-import { TodosContext } from '../../Context';
+import { TodosContext } from '../../Context/todos';
 
 export type SearchBarProps = {
     type?: string;

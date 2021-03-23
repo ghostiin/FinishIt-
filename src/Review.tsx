@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import Nav from './components/Nav';
 import { ITodo } from './constants';
 import Charts from './containers/Charts';
-import { TodosContext } from './Context';
+import { TodosContext } from './Context/todos';
 import styles from './review.module.scss';
 import Group from './UI/group';
 

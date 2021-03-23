@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import dayjs from 'dayjs';
 import { useLocation } from 'react-router-dom';
 import { filterTypes, FILTER_TYPE, IData, ITodo } from './constants';
-import { TodosContext, ADD_TODO } from './Context';
+import { TodosContext, ADD_TODO } from './Context/todos';
 import device from 'current-device';
 import List from './containers/List';
 import Module from './containers/Module';
