@@ -19,7 +19,7 @@ function genSortTime(prop: string) {
         } else if (dayjs(a[prop]).isAfter(b[prop])) {
             return 1;
         }
-        return 1;
+        return 0;
     }
 }
 

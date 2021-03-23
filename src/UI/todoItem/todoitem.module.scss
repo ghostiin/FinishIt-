@@ -95,10 +95,14 @@
 		padding: 13px 12px;
 		// transform: translateX(100%);
 		transition: all .2s ease-in-out;
-		right: -56px;
+		right: -60px;
+
+		& > span:first-of-type {
+			margin-right: 4px;
+		}
 	}
 
-	.menu-in {
+	.menu-left {
 		transform: translateX(-100%);
 		// right: 0;
 	}

@@ -4,16 +4,18 @@ import styles from './group.module.scss';
 
 type groupProps = {
     groupName: string;
-    todos: Array<any>
+    todos: Array<any>;
+    count?: number;
+    open?: boolean;
 }
 
 const Group: React.FC<groupProps> = (props) => {
-    const { groupName, todos = [] } = props;
-    const [show, toggleShow] = useState(false);
+    const { groupName, todos = [], open = false, count = null } = props;
+    const [show, toggleShow] = useState(open);
     return <div className={ styles.group }>
         <div className={ styles.title } onClick={ () => { toggleShow(!show) } }>
-            <div>{ groupName }</div>
-            {/* <div>{ '>' }</div> */ }
+            <div >{ groupName }</div>
+            <div>{ count }</div>
         </div>
         { show && (<div>
             {

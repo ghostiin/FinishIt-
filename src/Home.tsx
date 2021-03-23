@@ -23,8 +23,8 @@ type todoType = {
 
 const Home: React.FunctionComponent<homeProps> = props => {
     const { search } = useLocation();
-    const filter = new URLSearchParams(search).get('filter')
-    const IS_FILTERED = !!(filter && FILTER_TYPE[filter])
+    const filter = new URLSearchParams(search).get('filter');
+    const IS_FILTERED = !!(filter && FILTER_TYPE[filter]);
     const { todos, dispatch } = useContext(TodosContext);
     const [isAdding, setIsAdding] = useState(false);
     const [data, setData] = useState({
@@ -33,7 +33,7 @@ const Home: React.FunctionComponent<homeProps> = props => {
             return !t.completed && dayjs().isAfter(t.createTime, 'date')
         }).length,
         [filterTypes.scheduled]: todos.filter((t: todoType) => {
-            return t.scheduleTime && dayjs().isBefore(t.scheduleTime, 'date')
+            return (t.scheduleTime && (dayjs().isBefore(t.scheduleTime, 'date') || dayjs().isSame(t.scheduleTime, 'date')))
         }).length,
     })
 
@@ -43,14 +43,13 @@ const Home: React.FunctionComponent<homeProps> = props => {
         switch (filter) {
             case filterTypes.all:
                 return todos;
-            //TODO 添加其他filter
             case filterTypes.flag:
                 return todos.filter((t: todoType) => {
                     return !t.completed && dayjs().isAfter(t.createTime, 'date')
                 });
             case filterTypes.scheduled:
                 return todos.filter((t: todoType) => {
-                    return t.scheduleTime && dayjs().isBefore(t.scheduleTime, 'date')
+                    return (t.scheduleTime && (dayjs().isBefore(t.scheduleTime, 'date') || dayjs().isSame(t.scheduleTime, 'date')))
                 });
             default:
                 //返回today's todo
@@ -81,14 +80,14 @@ const Home: React.FunctionComponent<homeProps> = props => {
                 return !t.completed && dayjs().isAfter(t.createTime, 'date')
             }).length,
             [filterTypes.scheduled]: todos.filter((t: todoType) => {
-                return t.scheduleTime && !t.completed && dayjs().isBefore(t.scheduleTime, 'date')
+                return (t.scheduleTime && (dayjs().isBefore(t.scheduleTime, 'date') || dayjs().isSame(t.scheduleTime, 'date')))
             }).length,
         })
     }, [todos.length, todos])
 
     useEffect(() => {
         if (newTodo.name && !isAdding) {
-            addTodo({ ...newTodo, createTime: dayjs().format(), flag: false, scheduleTime: '' });
+            addTodo({ ...newTodo, createTime: dayjs().format(), flag: false, scheduleTime: dayjs().format() });
             setNewTodo({ name: '', id: uuidv4(), completed: false })
         }
     }, [isAdding])

@@ -10,15 +10,15 @@ interface IContextProps {
 
 
 const genMockTodos = () => {
-	const m = [14, 15, 16, 17, 18, 19, 20];
-	const mocks: { name: string; id: string; scheduleTime: dayjs.Dayjs; completed: boolean; flag: boolean; createTime: string; }[] = [];
+	const m = [14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
+	const mocks: { name: string; id: string; scheduleTime: string | dayjs.Dayjs; completed: boolean; flag: boolean; createTime: string; }[] = [];
 	function g() {
 		m.forEach((d) => {
 			const id = uuidv4();
 			const m = {
 				name: `${d}-${id}`,
 				id: id,
-				scheduleTime: Math.random() > 0.75 ? dayjs().add(Math.floor(Math.random() * (7 + 1)), 'day') : null,
+				scheduleTime: Math.random() > 0.75 ? dayjs().add(Math.floor(Math.random() * (7 + 1)), 'day') : `2021-03-${d}T21:06:13+08:00`,
 				completed: Math.random() > 0.5 ? true : false,
 				flag: false,
 				createTime: `2021-03-${d}T21:06:13+08:00`,

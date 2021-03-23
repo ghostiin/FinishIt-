@@ -1,0 +1,47 @@
+.modal {
+	height: 100%;
+	width: 100%;
+	position: fixed;
+	top: 0;
+	left: 0;
+	background-color: rgba(24, 20, 26, 0.8);
+	z-index: 100;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	:global(.popUp) {
+		background-color: #fff;
+		z-index: 10;
+		padding: 20px;
+		border-radius: 5px;
+		font-size: 18px;
+		text-align: center;
+
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		flex-direction: column;
+
+		& > div {
+			margin-bottom: 20px;
+		}
+	}
+	:global(.loginPopUp) {
+		background-color: #fff;
+		z-index: 10;
+		padding: 20px;
+		border-radius: 5px;
+		font-size: 18px;
+		text-align: center;
+
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		flex-direction: column;
+
+		& > div {
+			margin-bottom: 20px;
+		}
+	}
+}
