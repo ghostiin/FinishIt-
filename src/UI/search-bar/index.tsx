@@ -7,7 +7,7 @@ export type SearchBarProps = {
     type?: string;
     placeholder?: string;
     style?: any;
-    searchQuery?: any;
+    searchQuery?: (query: string) => void;
     showCancel: boolean;
     clickInput: () => void;
     clickCancel: () => void;

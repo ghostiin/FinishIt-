@@ -5,12 +5,13 @@ import { DELETE_TODO, MODIFY_TODO, TodosContext, TOGGLE_TODO } from '../../Conte
 import Modal from '../modal';
 import styles from './todoitem.module.scss';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
+import { ITodo } from '../../constants';
 // import 'react-day-picker/lib/style.css'; // in gloabl.scss
 
 
 export type TodoItemProps = {
-    todo: { name: string, id: number, completed: boolean, scheduleTime: string, createTime: string }
-    setTodo?: any;
+    todo: ITodo,
+    setTodo?: (t: ITodo) => void;
     newOne?: boolean;
     setAdding?: () => void;
     readonly?: boolean;
@@ -18,7 +19,7 @@ export type TodoItemProps = {
 
 
 const TodoItem: React.FC<TodoItemProps> = (props) => {
-    const { newOne = false, setAdding, todo = { name: '', id: dayjs().unix(), completed: false, createTime: dayjs().format(), flag: false, scheduleTime: '' } } = props;
+    const { newOne = false, setAdding, todo } = props;
     const { readonly = false } = props;
     const { todos, dispatch } = useContext(TodosContext);
     const [showDelete, setShowDelete] = useState(false);
@@ -39,15 +40,15 @@ const TodoItem: React.FC<TodoItemProps> = (props) => {
         }
     }, [])
 
-    const toggleTodo = (id: number) => {
+    const toggleTodo = (id: string) => {
         dispatch({ type: TOGGLE_TODO, payload: id })
     }
 
-    const modifyTodo = (id: number, modifyContent: any) => {
+    const modifyTodo = (id: string, modifyContent: ITodo) => {
         dispatch({ type: MODIFY_TODO, payload: { id, modifyContent } })
     }
 
-    const deleteTodo = (id: number) => {
+    const deleteTodo = (id: string) => {
         dispatch({ type: DELETE_TODO, payload: id })
     }
 
@@ -62,7 +63,7 @@ const TodoItem: React.FC<TodoItemProps> = (props) => {
             <input type="radio" id='radioId' value="state" checked={ todo.completed }
                 onChange={ () => { } }
             ></input>
-            <label htmlFor='radioId' onClick={ () => toggleTodo(todo.id) }></label>
+            <label htmlFor='radioId' onClick={ () => toggleTodo(todo._id) }></label>
             <span >
                 {
                     canEdit || newOne ? (
@@ -71,9 +72,9 @@ const TodoItem: React.FC<TodoItemProps> = (props) => {
                                 readOnly={ readonly }
                                 onChange={ (e) => {
                                     if (newOne) {
-                                        props.setTodo({ name: e.target.value })
+                                        props.setTodo({ ...todo, name: e.target.value })
                                     } else {
-                                        modifyTodo(todo.id, { name: e.target.value })
+                                        modifyTodo(todo._id, { ...todo, name: e.target.value })
                                     }
                                 } } ref={ inputRef } autoFocus={ newOne || canEdit }
                                 onBlur={ () => {
@@ -95,7 +96,7 @@ const TodoItem: React.FC<TodoItemProps> = (props) => {
         </div>
         <span className={ `${styles.menu} ${showDelete && styles['menu-left']}` }>
             <span onClick={ () => { setShowDelete(false); setShowModal(true) } }>📅</span>
-            <span onClick={ () => { deleteTodo(todo.id); setShowDelete(false) } }>❌</span>
+            <span onClick={ () => { deleteTodo(todo._id); setShowDelete(false) } }>❌</span>
         </span>
 
         { showModal &&
@@ -107,7 +108,7 @@ const TodoItem: React.FC<TodoItemProps> = (props) => {
                         onDayChange={ day => {
                             // console.log(dayjs(day).format())
                             // modify todo
-                            modifyTodo(todo.id, { scheduleTime: dayjs(day).format() })
+                            modifyTodo(todo._id, { ...todo, scheduleTime: dayjs(day).format() })
                         } }
                     />
                 </div>

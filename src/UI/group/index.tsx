@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
+import { ITodo } from '../../constants';
 import TodoItem from '../todoItem';
 import styles from './group.module.scss';
 
 type groupProps = {
     groupName: string;
-    todos: Array<any>;
+    todos: Array<ITodo>;
     count?: number;
     open?: boolean;
 }
@@ -22,7 +23,7 @@ const Group: React.FC<groupProps> = (props) => {
                 todos.map(todo => {
                     return <TodoItem
                         todo={ todo }
-                        key={ todo.id }
+                        key={ todo._id }
                     />
                 })
             }

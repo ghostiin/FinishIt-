@@ -1,11 +1,11 @@
 import React from 'react';
 import { useHistory } from 'react-router';
-import { filterTypes } from '../../constants';
+import { filterTypes, IData } from '../../constants';
 import Card from '../../UI/card';
 import styles from './module.module.scss'
 
 type moduleProps = {
-    data: any;
+    data: IData;
 }
 
 const Module: React.FC<moduleProps> = (props) => {

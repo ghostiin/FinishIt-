@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react';
 import ReactECharts from 'echarts-for-react';
 import dayjs from 'dayjs';
 import cloneDeep from 'lodash/clonedeep';
+import { ITodo } from '../../constants';
 
 type chartsProps = {
-    todos: any;
+    todos: ITodo[];
 }
 
 const Charts: React.FC<chartsProps> = (props) => {
@@ -47,21 +48,6 @@ const Charts: React.FC<chartsProps> = (props) => {
                     return res;
                 })()
             },
-            // {
-            //     type: 'category',
-            //     boundaryGap: true,
-            //     // data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
-            //     data: (function () {
-            //         let now = dayjs().get('date')
-            //         let res = [now];
-            //         let len = 1;
-            //         while (len++ && len <= 7) {
-            //             const tmp = dayjs().subtract(len, 'day');
-            //             res.unshift(tmp.date())
-            //         }
-            //         return res;
-            //     })()
-            // },
         ],
         yAxis: [
             {
@@ -144,8 +130,8 @@ const Charts: React.FC<chartsProps> = (props) => {
         let len = 6;
         while (len >= 0) {
             const tmp = dayjs().subtract(len, 'day');
-            const part = todos.filter((t: any) => tmp.isSame(t.createTime, 'date'))
-            const f = part.filter((t: any) => t.completed).length;
+            const part = todos.filter((t: ITodo) => tmp.isSame(t.createdAt, 'date'))
+            const f = part.filter((t: ITodo) => t.completed).length;
             const uf = part.length - f;
             d1.push(Number((f / part.length).toFixed(1)));
             d2.push(Number(f));

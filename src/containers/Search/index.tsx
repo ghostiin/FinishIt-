@@ -1,5 +1,6 @@
 import React, { useContext, useState } from 'react';
 import Nav from '../../components/Nav';
+import { ITodo } from '../../constants';
 import { TodosContext } from '../../Context';
 import SearchBar from '../../UI/search-bar';
 import TodoItem from '../../UI/todoItem';
@@ -16,7 +17,7 @@ const Search: React.FC<SearchProps> = (props) => {
     const [searchResults, setSearchResults] = useState([]);
     const searchQuery = (query: string) => {
         if (query) {
-            setSearchResults(todos.filter((t: any) => t.name.includes(query)))
+            setSearchResults(todos.filter((t: ITodo) => t.name.includes(query)))
         } else {
             setSearchResults([])
         }
@@ -36,7 +37,7 @@ const Search: React.FC<SearchProps> = (props) => {
         {
             !!searchResults.length && <div className={ styles.results }>{
                 searchResults.map(st => {
-                    return <TodoItem readonly todo={ st } key={ st.id } />
+                    return <TodoItem readonly todo={ st } key={ st._id } />
                 })
             }</div>
         }

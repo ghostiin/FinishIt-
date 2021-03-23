@@ -1,19 +1,18 @@
 import dayjs from 'dayjs';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import Nav from './components/Nav';
+import { ITodo } from './constants';
 import Charts from './containers/Charts';
 import { TodosContext } from './Context';
 import styles from './review.module.scss';
-import Card from './UI/card';
 import Group from './UI/group';
-import TodoItem from './UI/todoItem';
 
 type reviewProps = {
 
 }
 
 function genSortTime(prop: string) {
-    return function sortTime(a: any, b: any) {
+    return function sortTime(a: { [key: string]: any }, b: { [key: string]: any }) {
         if (dayjs(a[prop]).isBefore(b[prop])) {
             return -1;
         } else if (dayjs(a[prop]).isAfter(b[prop])) {
@@ -24,15 +23,15 @@ function genSortTime(prop: string) {
 }
 
 
-const sortCreateTime = genSortTime('createTime');
+const sortCreateTime = genSortTime('createdAt');
 const sortScheduleTime = genSortTime('scheduleTime');
 
 const Review: React.FC<reviewProps> = (props) => {
     const { todos } = useContext(TodosContext);
-    const finished = useRef<number>(todos.filter((t: any) => t.completed).length || 0)
-    const weekTodos = todos.filter((t: any) => !t.completed && dayjs().subtract(7, 'day').isBefore(t.createTime));
+    const finished = useRef<number>(todos.filter((t: ITodo) => t.completed).length || 0)
+    const weekTodos = todos.filter((t: ITodo) => !t.completed && dayjs().subtract(7, 'day').isBefore(t.scheduleTime, 'date') && dayjs().isAfter(t.scheduleTime, 'date'));
     const sortWeekTodos = weekTodos.sort(sortCreateTime).slice(0, 3)
-    const upcomingTodos = todos.filter((t: any) => t.scheduleTime && !t.completed).sort(sortScheduleTime).slice(0, 3)
+    const upcomingTodos = todos.filter((t: ITodo) => dayjs().isBefore(t.scheduleTime, 'date') && !t.completed).sort(sortScheduleTime).slice(0, 3)
 
     return (<div className={ styles.review }>
         <Nav isFiltered={ true } />
@@ -50,23 +49,12 @@ const Review: React.FC<reviewProps> = (props) => {
         <div className={ styles.subTitle }>
             最近7天中
             </div>
-        {/* <div>
-                最拖延的三件事
-                {
-                    sortWeekTodos.slice(0, 3).map((todo: any) => {
-                        return <TodoItem
-                            todo={ todo }
-                            key={ todo.id }
-                        />
-                    })
-                }
-            </div> */}
         <Group
-            groupName={ '💥猜猜你本周最拖延的三件未完成事项是？' }
+            groupName={ '💥7天内最拖延的三件未完成事项是？' }
             todos={ sortWeekTodos }
         />
         <Group
-            groupName={ '🔥猜猜接下来最紧急的三件未完成事项是？' }
+            groupName={ '🔥接下来最紧急的三件未完成事项是？' }
             todos={ upcomingTodos }
         />
     </div>

@@ -1,17 +1,17 @@
 import dayjs from 'dayjs';
 import React, { useEffect, useRef } from 'react';
-import { filterTypes, FILTER_INFO_MAP } from '../../constants';
+import { filterTypes, FILTER_INFO_MAP, ITodo } from '../../constants';
 import Button from '../../UI/button';
 import Group from '../../UI/group';
 import TodoItem from '../../UI/todoItem';
 import styles from './todolist.module.scss';
 
 type listProps = {
-    todos: Array<any>,
+    todos: Array<ITodo>,
     filterType?: string,
 }
 
-function sortTime(a: any, b: any) {
+function sortTime(a: string, b: string) {
     if (dayjs(a).isBefore(b)) {
         return -1;
     } else if (dayjs(a).isAfter(b)) {
@@ -28,7 +28,7 @@ const List: React.FunctionComponent<listProps> = (props) => {
                 todos.map(todo => {
                     return <TodoItem
                         todo={ todo }
-                        key={ todo.id }
+                        key={ todo._id }
                     />
                 })
             }
@@ -36,8 +36,8 @@ const List: React.FunctionComponent<listProps> = (props) => {
     );
 
     const genscheduleList = () => {
-        let allSchedule: { [x: string]: any[]; } = {};
-        todos.forEach((t: any) => {
+        let allSchedule: { [x: string]: ITodo[]; } = {};
+        todos.forEach((t: ITodo) => {
             const f = dayjs(t.scheduleTime).format('YYYY-MM-DD');
             if (!allSchedule[f]) {
                 allSchedule[f] = [t];
@@ -47,7 +47,7 @@ const List: React.FunctionComponent<listProps> = (props) => {
         })
         return <div className={ styles.scheduleList }>
             { Object.keys(allSchedule).length &&
-                Object.keys(allSchedule).sort(sortTime).map((s: any) => {
+                Object.keys(allSchedule).sort(sortTime).map((s: string) => {
                     return (
                         <Group
                             groupName={ dayjs().isSame(s, 'date') ? '今日' : s }
