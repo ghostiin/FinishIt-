@@ -9,6 +9,8 @@ import Module from './containers/Module';
 import Search from './containers/Search';
 import Footer from './components/footer';
 import TodoItem from './UI/todoItem';
+import { message } from './UI/message';
+import { createTodo } from './apis/request';
 
 type homeProps = {}
 
@@ -21,7 +23,7 @@ const Home: React.FunctionComponent<homeProps> = props => {
     const [data, setData] = useState<IData>({
         [filterTypes.all]: todos.length,
         [filterTypes.flag]: todos.filter((t: ITodo) => {
-            return !t.completed && dayjs().isAfter(t.createdAt, 'date')
+            return !t.completed && dayjs().isAfter(t.scheduleTime, 'date')
         }).length,
         [filterTypes.scheduled]: todos.filter((t: ITodo) => {
             return (t.scheduleTime && (dayjs().isBefore(t.scheduleTime, 'date') || dayjs().isSame(t.scheduleTime, 'date')))
@@ -39,7 +41,7 @@ const Home: React.FunctionComponent<homeProps> = props => {
                 return todos;
             case filterTypes.flag:
                 return todos.filter((t: ITodo) => {
-                    return !t.completed && dayjs().isAfter(t.createdAt, 'date')
+                    return !t.completed && dayjs().isAfter(t.scheduleTime, 'date')
                 });
             case filterTypes.scheduled:
                 return todos.filter((t: ITodo) => {
@@ -48,12 +50,20 @@ const Home: React.FunctionComponent<homeProps> = props => {
             default:
                 //返回today's todo
                 return todos.filter((t: ITodo) => {
-                    return dayjs().isSame(t.createdAt, 'date')
+                    return dayjs().isSame(t.scheduleTime, 'date')
                 });
         }
     }
-    const addTodo = (todo: ITodo) => {
-        dispatch({ type: ADD_TODO, payload: todo })
+
+    const addTodo = async (todo: ITodo) => {
+        try {
+            const resp: any = await createTodo(todo);
+            dispatch({ type: ADD_TODO, payload: resp })
+            setNewTodo({ name: '', completed: false })
+        } catch (err) {
+            message.error('无法添加新事项！')
+        }
+
     }
 
 
@@ -66,12 +76,12 @@ const Home: React.FunctionComponent<homeProps> = props => {
     }, [])
 
     useEffect(() => {
-        console.log('setitem'); //TODO
-        window.localStorage.setItem('todos', JSON.stringify(todos))
+        // console.log('setitem'); 
+        // window.localStorage.setItem('todos', JSON.stringify(todos))
         setData({
             [filterTypes.all]: todos.length,
             [filterTypes.flag]: todos.filter((t: ITodo) => {
-                return !t.completed && dayjs().isAfter(t.createdAt, 'date')
+                return !t.completed && dayjs().isAfter(t.scheduleTime, 'date')
             }).length,
             [filterTypes.scheduled]: todos.filter((t: ITodo) => {
                 return (t.scheduleTime && (dayjs().isBefore(t.scheduleTime, 'date') || dayjs().isSame(t.scheduleTime, 'date')))
@@ -82,7 +92,6 @@ const Home: React.FunctionComponent<homeProps> = props => {
     useEffect(() => {
         if (newTodo.name && !isAdding) {
             addTodo({ ...newTodo, flag: false, scheduleTime: dayjs().format() }); //默认schedutime为添加时间
-            setNewTodo({ name: '', completed: false })
         }
     }, [isAdding])
 

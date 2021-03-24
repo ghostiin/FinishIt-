@@ -56,8 +56,9 @@ const Nav: React.FC<NavProps> = (props) => {
                             const { user, token } = resp;
                             localStorage.setItem('token', token);
                             dispatch({ type: LOGIN_USER, payload: user })
+                            setShow(false);
                         }
-                        setShow(false);
+
                     } catch (err) {
                         localStorage.removeItem('token');
                     }

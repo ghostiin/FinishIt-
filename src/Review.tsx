@@ -49,14 +49,20 @@ const Review: React.FC<reviewProps> = (props) => {
         <div className={ styles.subTitle }>
             最近7天中
             </div>
-        <Group
+        {sortWeekTodos.length ? <Group
             groupName={ '💥7天内最拖延的三件未完成事项是？' }
             todos={ sortWeekTodos }
-        />
-        <Group
+        /> : null }
+        {upcomingTodos.length ? <Group
             groupName={ '🔥接下来最紧急的三件未完成事项是？' }
             todos={ upcomingTodos }
-        />
+        /> : null }
+        {
+            !upcomingTodos.length && !sortWeekTodos.length ?
+                <div className={ styles.empty }>
+                    🔮请多使用一段时间来解锁神秘区域吧~
+            </div> : null
+        }
     </div>
     )
 }

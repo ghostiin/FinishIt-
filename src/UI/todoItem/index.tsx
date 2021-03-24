@@ -6,6 +6,8 @@ import Modal from '../modal';
 import styles from './todoitem.module.scss';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
 import { ITodo } from '../../constants';
+import { completeTodo, deleteTodo, updateTodo } from '../../apis/request';
+import { message } from '../message';
 // import 'react-day-picker/lib/style.css'; // in gloabl.scss
 
 
@@ -21,10 +23,11 @@ export type TodoItemProps = {
 const TodoItem: React.FC<TodoItemProps> = (props) => {
     const { newOne = false, setAdding, todo } = props;
     const { readonly = false } = props;
-    const { todos, dispatch } = useContext(TodosContext);
-    const [showDelete, setShowDelete] = useState(false);
-    const [showModal, setShowModal] = useState(false);
-    const [canEdit, setCanEdit] = useState(false);
+    const { dispatch } = useContext(TodosContext);
+    const [showDelete, setShowDelete] = useState<boolean>(false);
+    const [showModal, setShowModal] = useState<boolean>(false);
+    const [canEdit, setCanEdit] = useState<boolean>(false);
+    const [modifyTemp, setModifyTemp] = useState<ITodo>(todo);
     const inputRef = useRef<HTMLInputElement>();
 
     const bind = useDrag(({ down, movement: [mx, my] }) => {
@@ -40,16 +43,35 @@ const TodoItem: React.FC<TodoItemProps> = (props) => {
         }
     }, [])
 
-    const toggleTodo = (id: string) => {
-        dispatch({ type: TOGGLE_TODO, payload: id })
+    const toggleTodo = async (id: string, status: boolean) => {
+        try {
+            const resp: any = await completeTodo(id, !status)
+            dispatch({ type: TOGGLE_TODO, payload: id })
+        } catch (err) {
+            message.error('出了一点小问题...')
+        }
     }
 
-    const modifyTodo = (id: string, modifyContent: ITodo) => {
-        dispatch({ type: MODIFY_TODO, payload: { id, modifyContent } })
+    const modifyTodo = async (modTodo: ITodo) => {
+        try {
+            const resp: any = await updateTodo(modTodo);
+            // console.log(resp)
+            dispatch({ type: MODIFY_TODO, payload: resp })
+            setModifyTemp(resp);
+        } catch (err) {
+            message.error('出了一点小问题...')
+        }
+
     }
 
-    const deleteTodo = (id: string) => {
-        dispatch({ type: DELETE_TODO, payload: id })
+    const delTodo = async (id: string) => {
+        try {
+            const resp: any = await deleteTodo(id);
+            dispatch({ type: DELETE_TODO, payload: id })
+        } catch (err) {
+            message.error('出了一点小问题...')
+        }
+
     }
 
     return <div className={ styles.todoitem } onClick={ (e) => {
@@ -63,24 +85,28 @@ const TodoItem: React.FC<TodoItemProps> = (props) => {
             <input type="radio" id='radioId' value="state" checked={ todo.completed }
                 onChange={ () => { } }
             ></input>
-            <label htmlFor='radioId' onClick={ () => toggleTodo(todo._id) }></label>
+            <label htmlFor='radioId' onClick={ async () => { await toggleTodo(todo._id, todo.completed) } }></label>
             <span >
                 {
                     canEdit || newOne ? (
                         <>
-                            <input type="text" value={ todo.name }
+                            <input type="text"
+                                value={ modifyTemp.name }
                                 readOnly={ readonly }
                                 onChange={ (e) => {
                                     if (newOne) {
                                         props.setTodo({ ...todo, name: e.target.value })
-                                    } else {
-                                        modifyTodo(todo._id, { ...todo, name: e.target.value })
                                     }
-                                } } ref={ inputRef } autoFocus={ newOne || canEdit }
-                                onBlur={ () => {
+                                    setModifyTemp({ ...todo, name: e.target.value });
+                                }
+                                }
+                                ref={ inputRef } autoFocus={ newOne || canEdit }
+                                onBlur={ async () => {
                                     setCanEdit(false);
                                     if (newOne) {
                                         setAdding();
+                                    } else if (modifyTemp.name !== todo.name) { //真正修改才会发送req
+                                        await modifyTodo(modifyTemp); // 失去焦点时才发送修改req 避免发送过多req
                                     }
                                 } }
                             >
@@ -88,7 +114,7 @@ const TodoItem: React.FC<TodoItemProps> = (props) => {
                         </>
                     ) : (
                         <>
-                            <div onClick={ () => { setCanEdit(true) } }>{ todo.name }</div>
+                            <div onClick={ () => { setCanEdit(true) } }>{ modifyTemp.name }</div>
                         </>
                     )
                 }
@@ -96,7 +122,7 @@ const TodoItem: React.FC<TodoItemProps> = (props) => {
         </div>
         <span className={ `${styles.menu} ${showDelete && styles['menu-left']}` }>
             <span onClick={ () => { setShowDelete(false); setShowModal(true) } }>📅</span>
-            <span onClick={ () => { deleteTodo(todo._id); setShowDelete(false) } }>❌</span>
+            <span onClick={ async () => { await delTodo(todo._id); setShowDelete(false) } }>❌</span>
         </span>
 
         { showModal &&
@@ -105,10 +131,10 @@ const TodoItem: React.FC<TodoItemProps> = (props) => {
                     <div>🕓选择计划执行日期</div>
                     <DayPickerInput
                         value={ dayjs(todo.scheduleTime).format('YYYY-MM-DD') }
-                        onDayChange={ day => {
+                        onDayChange={ async (day) => {
                             // console.log(dayjs(day).format())
                             // modify todo
-                            modifyTodo(todo._id, { ...todo, scheduleTime: dayjs(day).format() })
+                            await modifyTodo({ ...modifyTemp, scheduleTime: dayjs(day).format() })
                         } }
                     />
                 </div>

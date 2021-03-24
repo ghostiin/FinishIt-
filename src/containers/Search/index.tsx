@@ -11,7 +11,7 @@ export interface SearchProps {
 }
 
 const Search: React.FC<SearchProps> = (props) => {
-    const { todos, dispatch } = useContext(TodosContext);
+    const { todos } = useContext(TodosContext);
     const { isFiltered } = props;
     const [showCancel, setShowCancel] = useState(false);
     const [searchResults, setSearchResults] = useState([]);

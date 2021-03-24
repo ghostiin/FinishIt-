@@ -46,7 +46,7 @@ const List: React.FunctionComponent<listProps> = (props) => {
             }
         })
         return <div className={ styles.scheduleList }>
-            { Object.keys(allSchedule).length &&
+            { Object.keys(allSchedule).length ?
                 Object.keys(allSchedule).sort(sortTime).map((s: string) => {
                     return (
                         <Group
@@ -56,7 +56,7 @@ const List: React.FunctionComponent<listProps> = (props) => {
                             open={ dayjs().isSame(s, 'date') }
                         />
                     )
-                })
+                }) : null
             }
         </div>
     }
@@ -66,6 +66,9 @@ const List: React.FunctionComponent<listProps> = (props) => {
             <div className={ styles.list }>
                 <h1>{ FILTER_INFO_MAP[filterType || 'todo'] }</h1>
                 { filterType === filterTypes.scheduled ? genscheduleList() : normalList }
+                {
+                    todos.length === 0 ? (<div className={ styles.empty }>🐷今天想做什么呢？</div>) : null
+                }
             </div>
         </>
     )

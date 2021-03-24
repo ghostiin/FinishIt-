@@ -7,38 +7,37 @@ import { UserContext } from './user';
 
 interface IContextProps {
 	todos: ITodo[];
-	// dispatch: ({type}:{type:string}) => void;
 	dispatch: any;
 }
 
 
-const genMockTodos = () => {
-	const m = [14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
-	const mocks: ITodo[] = [];
-	function g() {
-		m.forEach((d) => {
-			const id = uuidv4();
-			const m: ITodo = {
-				name: `${d}-${id}`,
-				_id: id,
-				scheduleTime: Math.random() > 0.75 ? dayjs().add(Math.floor(Math.random() * (7 + 1)), 'day').format() : `2021-03-${d}T21:06:13+08:00`,
-				completed: Math.random() > 0.5 ? true : false,
-				flag: false,
-				createdAt: `2021-03-${d}T10:12:07.653Z`,
-			}
-			mocks.push(m);
-		})
-	}
+// const genMockTodos = () => {
+// 	const m = [14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
+// 	const mocks: ITodo[] = [];
+// 	function g() {
+// 		m.forEach((d) => {
+// 			const id = uuidv4();
+// 			const m: ITodo = {
+// 				name: `${d}-${id}`,
+// 				_id: id,
+// 				scheduleTime: Math.random() > 0.75 ? dayjs().add(Math.floor(Math.random() * (7 + 1)), 'day').format() : `2021-03-${d}T21:06:13+08:00`,
+// 				completed: Math.random() > 0.5 ? true : false,
+// 				flag: false,
+// 				createdAt: `2021-03-${d}T10:12:07.653Z`,
+// 			}
+// 			mocks.push(m);
+// 		})
+// 	}
 
-	for (let i = 0; i < 4; i++) {
-		g();
-	}
-	console.log(mocks);
-	return mocks;
+// 	for (let i = 0; i < 4; i++) {
+// 		g();
+// 	}
+// 	console.log(mocks);
+// 	return mocks;
 
-}
+// }
 
-const initialTodos = JSON.parse(localStorage.getItem('todos'));
+// const initialTodos = JSON.parse(localStorage.getItem('todos'));
 // const initialTodos = genMockTodos();
 
 export const TodosContext = React.createContext({} as IContextProps);
@@ -68,7 +67,7 @@ const todosReducer = (state: Array<ITodo>, action: { type: string, payload: any 
 		case MODIFY_TODO:
 			return state.map(t => {
 				if (t._id === action.payload._id) {
-					t = { ...t, ...action.payload.modifyContent }
+					t = { ...t, ...action.payload }
 				}
 				return t;
 			})
@@ -81,7 +80,7 @@ const todosReducer = (state: Array<ITodo>, action: { type: string, payload: any 
 };
 
 export const TodosProvider = (props: { children: React.ReactNode }) => {
-	const [todos, dispatch] = useReducer(todosReducer, initialTodos);
+	const [todos, dispatch] = useReducer(todosReducer, []);
 	const { user } = useContext(UserContext);
 	const fetchOriginalTodos = async () => {
 		if (user) {
@@ -91,7 +90,11 @@ export const TodosProvider = (props: { children: React.ReactNode }) => {
 	}
 
 	useEffect(() => {
-		fetchOriginalTodos()
+		if (user && Object.keys(user).length) {
+			fetchOriginalTodos()
+		} else {
+			dispatch({ type: SET_TODOS, payload: [] })
+		}
 	}, [user])
 
 	return <TodosContext.Provider value={ { todos, dispatch } }>{ props.children }</TodosContext.Provider>;
