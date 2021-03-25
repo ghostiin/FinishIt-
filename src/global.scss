@@ -52,7 +52,7 @@ body {
 	.DayPicker {
 		display: inline-block;
 		// font-size: 1rem;
-		font-size: 16px;
+		font-size: 16px; //使postcss将其转化成vw单位，该样式下都以此为基准
 	}
 
 	.DayPicker-wrapper {

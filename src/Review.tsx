@@ -46,7 +46,7 @@ const Review: React.FC<reviewProps> = (props) => {
                 todos.length ? (
                     <>
                         完成率
-                        <span>{ (finished.current * 100 / todos.length) }</span>%
+                        <span>{ (finished.current * 100 / todos.length).toFixed(1) }</span>%
                     </>
                 ) : <>从完成一件小事开始获得简单的快乐</>
             }
