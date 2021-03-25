@@ -39,7 +39,7 @@ const Module: React.FC<moduleProps> = (props) => {
             </div>
             <div>{ Number(flag) }</div>
         </div></Card>
-        <Card><div onClick={ () => history.push('/review') } className={ styles.card }>
+        <Card><div onClick={ () => history.push('/?mod=review') } className={ styles.card }>
             <div className={ styles.left }>
                 <div>📈</div>
                 <span>回顾与分析</span>

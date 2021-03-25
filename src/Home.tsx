@@ -3,7 +3,6 @@ import dayjs from 'dayjs';
 import { useLocation } from 'react-router-dom';
 import { filterTypes, FILTER_TYPE, IData, ITodo } from './constants';
 import { TodosContext, ADD_TODO } from './Context/todos';
-import device from 'current-device';
 import List from './containers/List';
 import Module from './containers/Module';
 import Search from './containers/Search';
@@ -12,12 +11,16 @@ import TodoItem from './UI/todoItem';
 import { message } from './UI/message';
 import { createTodo } from './apis/request';
 
+import Review from './Review';
+
 type homeProps = {}
 
 const Home: React.FunctionComponent<homeProps> = props => {
     const { search } = useLocation();
     const filter = new URLSearchParams(search).get('filter');
+    const mod = new URLSearchParams(search).get('mod');
     const IS_FILTERED = !!(filter && FILTER_TYPE[filter]);
+    const IS_REVIEW = !!(mod && mod === 'review');
     const { todos, dispatch } = useContext(TodosContext);
     const [isAdding, setIsAdding] = useState(false);
     const [data, setData] = useState<IData>({
@@ -95,7 +98,7 @@ const Home: React.FunctionComponent<homeProps> = props => {
         }
     }, [isAdding])
 
-    const Mobile = (
+    const Home = (
         <>
             <Search isFiltered={ IS_FILTERED } />
             {
@@ -114,17 +117,13 @@ const Home: React.FunctionComponent<homeProps> = props => {
             }
             <Footer addNewOne={ () => { setIsAdding(true) } } />
         </>
-    );
+    )
 
-    //TODO PC兼容
-    const Desktop = (
-        <>
-            <div className={ 'pc' }>
-                would be desktop
-            </div>
-        </>
-    );
-    return device.type === 'mobile' ? Mobile : Desktop;
+
+    //因为ios webapp跳转连接时弹出safari组件影响使用感
+    //所以这里强行使用单页，把review也挂在/下
+    return IS_REVIEW ? <Review /> : Home;
+
 }
 
 export default Home;

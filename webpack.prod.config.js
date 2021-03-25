@@ -8,6 +8,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const WorkboxPlugin = require('workbox-webpack-plugin');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 const SPA = true;
 const setMPA = () => {
@@ -59,7 +60,6 @@ module.exports = {
 		path: path.join(__dirname, 'dist'),
 		filename: '[name]_[chunkhash:8].js'
 	},
-	devtool: 'source-map',
 	resolve: {
 		extensions: [ '.ts', '.tsx', '.js', '.json' ]
 	},
@@ -106,12 +106,12 @@ module.exports = {
 				]
 			},
 			{
-				test: /\.(png|jpe?g|gif)$/i,
+				test: /\.(png|jpe?g|gif|svg)$/i,
 				use: [
 					{
 						loader: 'file-loader',
 						options: {
-							name: '[name]_[hash:8][ext]'
+							name: '[name]_[hash:8].[ext]'
 						}
 					}
 				]
@@ -130,6 +130,7 @@ module.exports = {
 			clientsClaim: true,
 			skipWaiting: true
 		}),
+		new BundleAnalyzerPlugin(),
 		...HtmlWebpackPlugins
 	],
 	//当使用cdn方式引入外部依赖的时候，可以通过external字段告诉webpack不要去打包在bundle里
@@ -148,10 +149,12 @@ module.exports = {
 	// 	hot: true
 	// }
 	optimization: {
+		// splitChunks: {
+		// 	// include all types of chunks
+		// 	chunks: 'all'
+		// },
 		minimizer: [
 			new CssMinimizerPlugin({
-				parallel: true, // 可省略，默认开启并行
-				sourceMap: true, // 可省略，默认遵循webpack的devtool配置
 				minimizerOptions: {
 					preset: 'advanced' // 需额外安装
 				}

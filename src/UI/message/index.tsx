@@ -53,7 +53,7 @@ ReactDOM.render(<MessageContainer />, document.querySelector('#message'))
 export const message: MessageApi = {
     error: function (warn) {
         add({
-            message: warn,
+            message: warn || '出现了未曾料到的问题orz！',
             key: uuidv4(),
             type: MessageType.warn
         })

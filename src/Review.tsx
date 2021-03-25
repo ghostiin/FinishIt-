@@ -28,10 +28,11 @@ const sortScheduleTime = genSortTime('scheduleTime');
 
 const Review: React.FC<reviewProps> = (props) => {
     const { todos } = useContext(TodosContext);
-    const finished = useRef<number>(todos.filter((t: ITodo) => t.completed).length || 0)
+    const finished = useRef<number>(Array.isArray(todos) ? todos.filter((t: ITodo) => t.completed).length : 0)
     const weekTodos = todos.filter((t: ITodo) => !t.completed && dayjs().subtract(7, 'day').isBefore(t.scheduleTime, 'date') && dayjs().isAfter(t.scheduleTime, 'date'));
     const sortWeekTodos = weekTodos.sort(sortCreateTime).slice(0, 3)
     const upcomingTodos = todos.filter((t: ITodo) => dayjs().isBefore(t.scheduleTime, 'date') && !t.completed).sort(sortScheduleTime).slice(0, 3)
+
 
     return (<div className={ styles.review }>
         <Nav isFiltered={ true } />
@@ -41,11 +42,20 @@ const Review: React.FC<reviewProps> = (props) => {
             <span>{ finished.current }</span>件你想做的事！
             </div>
         <div className={ styles.rate }>
-            完成率
-                    <span>{ (finished.current * 100 / todos.length).toFixed(1) }</span>
-                    %
-            </div>
-        <Charts todos={ todos }></Charts>
+            {
+                todos.length ? (
+                    <>
+                        完成率
+                        <span>{ (finished.current * 100 / todos.length) }</span>%
+                    </>
+                ) : <>从完成一件小事开始获得简单的快乐</>
+            }
+
+        </div>
+        {todos.length ?
+            <>
+                <Charts todos={ todos } />
+            </> : null }
         <div className={ styles.subTitle }>
             最近7天中
             </div>
